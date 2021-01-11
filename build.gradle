@@ -1,10 +1,6 @@
-plugins {
-    id 'application'
-}
+apply plugin: "application"
 
-application {
-    mainClass.set("org.webcrawler.Main")
-}
+mainClassName = "org.webcrawler.Main"
 
 group 'org.webcrawler'
 version '1.0'

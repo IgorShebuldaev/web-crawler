@@ -19,7 +19,7 @@ public class Parser {
         this.link = link;
     }
 
-    public void run(Results results, ArrayList<Pattern> terms, int depth) throws PageLimitExceeded, IOException {
+    public void run(Results results, ArrayList<Pattern> terms, int depth) throws PageLimitExceeded, IOException, IllegalArgumentException {
         Document document = getDocument(link);
 
         results.addResult(link, collectStatistics(document, terms));
