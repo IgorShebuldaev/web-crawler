@@ -1,9 +1,7 @@
 # Web-crawler
 Web-crawler is a simple value search engine.
 ## Requirements
-+ Java 11
-+ Gradle
+Docker
 ## Getting Started
-    git clone https://github.com/IgorShebuldaev/web-crawler.git
-    chmod +x run.sh
-    ./run.sh
+    docker build . --tag crawler:v1 --no-cache
+    docker run -i crawler:v1 ./run.sh
