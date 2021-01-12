@@ -44,8 +44,8 @@ public class Main {
             output10.writeHeader(headers);
 
             outputAll.writeResults(results.values());
-            output10.writeResults(results.getSortedStats(), 9);
-            output10.printTopResults(results.getSortedStats());
+            output10.writeResults(results.getSortedStats(), 10);
+            output10.printTopResults(results.getSortedStats(), 10);
 
             outputAll.finish();
             output10.finish();

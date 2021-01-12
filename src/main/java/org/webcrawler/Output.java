@@ -22,8 +22,8 @@ public class Output {
         writeResults(results.stream().limit(limit).collect(Collectors.toCollection(ArrayList::new)));
     }
 
-    public void printTopResults(ArrayList<Stats> results) {
-        ArrayList<Stats> stats = results.stream().limit(9).collect(Collectors.toCollection(ArrayList::new));
+    public void printTopResults(ArrayList<Stats> results, int limit) {
+        ArrayList<Stats> stats = results.stream().limit(limit).collect(Collectors.toCollection(ArrayList::new));
         for (var links : stats) {
             System.out.print(links.url + " ");
             links.statistics.forEach((n) -> System.out.print(n + " "));
