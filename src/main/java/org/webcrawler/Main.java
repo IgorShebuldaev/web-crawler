@@ -1,32 +1,34 @@
 package org.webcrawler;
 
+import org.webcrawler.exceptions.InvalidLink;
+import org.webcrawler.exceptions.NotEnoughArguments;
+import org.webcrawler.exceptions.NotEnoughTerms;
 import org.webcrawler.exceptions.PageLimitExceeded;
+import org.webcrawler.input.Input;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Main {
-    public static void main(String[] args) {
-	    if (args.length < 2) {
-	        System.err.println("Not enough arguments");
-	        System.exit(1);
-        }
+    public static void main(String[] args) throws InvalidLink, NotEnoughTerms, NotEnoughArguments {
 
-        Results results = new Results();
+        Input input = new Input(args);
 
         ArrayList<Pattern> patterns = new ArrayList<>();
-	    for (int i = 1; i < args.length; i++) {
-	        patterns.add(Pattern.compile(args[i]));
+	    for (var term : input.getTerms()) {
+	        patterns.add(Pattern.compile(term));
         }
 
+        Results results = new Results(input.getParameters());
+
 	    try {
-            new Parser(args[0]).run(results, patterns, 1);
-        } catch(PageLimitExceeded _e) {
+            new Parser(input.getLink()).run(results, patterns, 1);
+        } catch(PageLimitExceeded a) {
 	        System.err.println("Page limit exceeded! Finishing.");
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException b) {
             System.out.println("Bad URL");
-        } catch (IOException e) {
+        } catch (IOException c) {
 	        System.exit(1);
         }
 

@@ -19,18 +19,18 @@ public class Parser {
         this.link = link;
     }
 
-    public void run(Results results, ArrayList<Pattern> terms, int depth) throws PageLimitExceeded, IOException, IllegalArgumentException {
+    public void run(Results results, ArrayList<Pattern> terms, int currentDepth) throws PageLimitExceeded, IOException, IllegalArgumentException {
         Document document = getDocument(link);
 
         results.addResult(link, collectStatistics(document, terms));
 
-        if (depth > 8) return;
+        if (currentDepth > results.getDepth()) return;
         List<String> listLinks = parseLinks(document);
 
         for (String nextLink : listLinks) {
             if (!results.isPageProcessed(nextLink)) {
                 try {
-                    new Parser(nextLink).run(results, terms, depth + 1);
+                    new Parser(nextLink).run(results, terms, currentDepth + 1);
                 } catch (Exception e) {
 
                 }

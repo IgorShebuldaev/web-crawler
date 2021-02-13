@@ -5,10 +5,20 @@ import java.util.stream.Collectors;
 
 public class Results {
     private HashMap<String, Stats> results;
-    private final int RESULTS_LIMIT = 100;
+    private int depth = 8;
+    private int pageLimit = 10000;
 
-    public Results() {
+    public Results(List<Integer> parameters) {
         this.results = new HashMap<>();
+        setNewParameters(parameters);
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public int getPageLimit() {
+        return pageLimit;
     }
 
     public void addResult(String url, ArrayList<Integer> stats) {
@@ -20,7 +30,7 @@ public class Results {
     }
 
     public boolean isLimitExceeded() {
-        return results.size() > RESULTS_LIMIT;
+        return results.size() > pageLimit;
     }
 
     public ArrayList<Stats> getSortedStats() {
@@ -34,5 +44,10 @@ public class Results {
 
     public ArrayList<Stats> values() {
         return new ArrayList<>(results.values());
+    }
+
+    private void setNewParameters(List<Integer> parameters) {
+        if (parameters.get(0) != 0) depth = parameters.get(0);
+        if (parameters.get(1) != 0) pageLimit = parameters.get(1);
     }
 }
