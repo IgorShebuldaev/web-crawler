@@ -1,6 +1,7 @@
 package org.webcrawler;
 
 import org.junit.jupiter.api.Test;
+import org.webcrawler.data.Stats;
 
 import java.util.ArrayList;
 

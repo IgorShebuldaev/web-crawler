@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.webcrawler.data.Results;
 import org.webcrawler.exceptions.PageLimitExceeded;
 
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package org.webcrawler;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.webcrawler.Results;
+import org.webcrawler.data.Results;
 
 import org.junit.jupiter.api.Test;
 

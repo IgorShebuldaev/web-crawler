@@ -1,4 +1,6 @@
-package org.webcrawler;
+package org.webcrawler.output;
+
+import org.webcrawler.data.Stats;
 
 import java.io.IOException;
 import java.util.ArrayList;

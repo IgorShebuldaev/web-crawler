@@ -1,10 +1,12 @@
 package org.webcrawler;
 
+import org.webcrawler.data.Results;
 import org.webcrawler.exceptions.InvalidLink;
 import org.webcrawler.exceptions.NotEnoughArguments;
 import org.webcrawler.exceptions.NotEnoughTerms;
 import org.webcrawler.exceptions.PageLimitExceeded;
 import org.webcrawler.input.Input;
+import org.webcrawler.output.Output;
 
 import java.io.IOException;
 import java.util.ArrayList;

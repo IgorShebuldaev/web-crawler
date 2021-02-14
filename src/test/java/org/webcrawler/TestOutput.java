@@ -2,6 +2,8 @@ package org.webcrawler;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.webcrawler.data.Stats;
+import org.webcrawler.output.Output;
 
 import static org.junit.jupiter.api.Assertions.*;
 
