@@ -2,6 +2,12 @@ apply plugin: "application"
 
 mainClassName = "org.webcrawler.Main"
 
+jar {
+    manifest {
+        attributes('Main-Class': 'org.webcrawler.Main')
+    }
+}
+
 group 'org.webcrawler'
 version '1.0'
 
