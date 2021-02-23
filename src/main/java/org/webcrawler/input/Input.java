@@ -1,40 +1,72 @@
 package org.webcrawler.input;
 
 import org.jsoup.Jsoup;
-import org.webcrawler.exceptions.InvalidLink;
-import org.webcrawler.exceptions.NotEnoughArguments;
-import org.webcrawler.exceptions.NotEnoughTerms;
+import org.webcrawler.exceptions.input.InvalidLink;
+import org.webcrawler.exceptions.input.NotEnoughArguments;
+import org.webcrawler.exceptions.input.NotEnoughTerms;
 
 import java.util.*;
 
 public class Input {
+    public interface ISomeClass {
+        void searchArguments(int index);
+    }
+
+    public class Test {
+        String[] args;
+        Test(String[] args) {
+            this.args = args;
+        }
+        void searchArguments(String flag, ISomeClass is) {
+            for (int i = 0; i < args.length; i++) {
+                if (args[i].equals(flag)) {
+                    is.searchArguments(i);
+                }
+            }
+        }
+    }
+
     private final String[] args;
     private final String flagLink = "-l", flagPageLimit = "-p", flagDepth = "-d", flagTerms = "-t";
     private String link;
-    private int depth, pageLimit;
+    private int depth = 0, pageLimit = 0;
     private String[] terms = new String[0];
 
     public Input(String[] args) throws InvalidLink, NotEnoughTerms, NotEnoughArguments {
         this.args = args;
-        searchLink();
-        depth = getParameter(flagDepth);
-        pageLimit = getParameter(flagPageLimit);
-        searchTerms();
+        setLink();
+        setParameters();
+        setTerms();
+
+        Test t = new Test(args);
+
+
+        t.searchArguments(flagDepth, (i) -> {
+            depth = Integer.parseInt(args[i + 1]);
+        });
+
+        t.searchArguments(flagPageLimit, (i) -> {
+            pageLimit = Integer.parseInt(args[i + 1]);
+        });
+
+        t.searchArguments(flagLink, (i) -> {
+            link = args[i + 1];
+        });
     }
 
-    public String getLink() {
+        public String getLink() {
         return link;
-    }
-
-    public String[] getTerms() {
-        return terms;
     }
 
     public List<Integer> getParameters() {
         return new ArrayList<>(Arrays.asList(depth, pageLimit));
     }
 
-    private void searchLink() throws InvalidLink, NotEnoughArguments {
+    public String[] getTerms() {
+        return terms;
+    }
+
+    private void setLink() throws InvalidLink, NotEnoughArguments {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals(flagLink)) {
                 link = args[i + 1];
@@ -50,17 +82,19 @@ public class Input {
         if (link == null) throw new NotEnoughArguments();
     }
 
-    private int getParameter(String flag) {
+    private void setParameters() {
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals(flag)) {
-                return Integer.parseInt(args[i + 1]);
+            if (args[i].equals(flagPageLimit)) {
+                pageLimit = Integer.parseInt(args[i + 1]);
+            }
+
+            if (args[i].equals(flagDepth)) {
+                depth = Integer.parseInt(args[i + 1]);
             }
         }
-
-        return 0;
     }
 
-    private void searchTerms() throws NotEnoughArguments, NotEnoughTerms {
+    private void setTerms() throws NotEnoughArguments, NotEnoughTerms {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals(flagTerms)) {
                 try {

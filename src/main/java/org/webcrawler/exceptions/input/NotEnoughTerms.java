@@ -1,4 +1,4 @@
-package org.webcrawler.exceptions;
+package org.webcrawler.exceptions.input;
 
 public class NotEnoughTerms extends Exception {
     public NotEnoughTerms() {

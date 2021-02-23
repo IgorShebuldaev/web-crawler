@@ -1,4 +1,4 @@
-package org.webcrawler.exceptions;
+package org.webcrawler.exceptions.parser;
 
 public class PageLimitExceeded extends Exception {
 

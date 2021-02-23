@@ -1,10 +1,10 @@
 package org.webcrawler;
 
 import org.webcrawler.data.Results;
-import org.webcrawler.exceptions.InvalidLink;
-import org.webcrawler.exceptions.NotEnoughArguments;
-import org.webcrawler.exceptions.NotEnoughTerms;
-import org.webcrawler.exceptions.PageLimitExceeded;
+import org.webcrawler.exceptions.input.InvalidLink;
+import org.webcrawler.exceptions.input.NotEnoughArguments;
+import org.webcrawler.exceptions.input.NotEnoughTerms;
+import org.webcrawler.exceptions.parser.PageLimitExceeded;
 import org.webcrawler.input.Input;
 import org.webcrawler.output.Output;
 
@@ -28,8 +28,6 @@ public class Main {
             new Parser(input.getLink()).run(results, patterns, 1);
         } catch(PageLimitExceeded a) {
 	        System.err.println("Page limit exceeded! Finishing.");
-        } catch (IllegalArgumentException b) {
-            System.out.println("Bad URL");
         } catch (IOException c) {
 	        System.exit(1);
         }

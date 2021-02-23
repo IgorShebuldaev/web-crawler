@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.webcrawler.exceptions.InvalidLink;
-import org.webcrawler.exceptions.NotEnoughArguments;
-import org.webcrawler.exceptions.NotEnoughTerms;
+import org.webcrawler.exceptions.input.InvalidLink;
+import org.webcrawler.exceptions.input.NotEnoughArguments;
+import org.webcrawler.exceptions.input.NotEnoughTerms;
 import org.webcrawler.input.Input;
 
 import java.util.ArrayList;
