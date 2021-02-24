@@ -7,6 +7,7 @@ import org.webcrawler.parser.PageParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +18,7 @@ public class TestParser {
 
     @BeforeEach
     public void initialize() {
-        pageParser = new PageParser(link);
+        pageParser = new PageParser(link, new ArrayList<>(Arrays.asList(0, 0)));
     }
 
     @Test

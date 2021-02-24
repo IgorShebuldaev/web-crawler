@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 
 public class PageParser {
     private String link;
-    private int depth;
-    private int pageLimit;
+    private int depth = 8;
+    private int pageLimit = 10000;
 
-    public PageParser(String nextLink) {
+    private PageParser(String nextLink) {
         this.link = nextLink;
     }
 
