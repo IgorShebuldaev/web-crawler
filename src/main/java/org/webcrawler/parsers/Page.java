@@ -13,12 +13,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class PageParser {
+public class Page {
     private String link;
     private int depth = 8;
     private int pageLimit = 10000;
 
-    private PageParser(String nextLink) {
+    private Page(String nextLink) {
         this.link = nextLink;
     }
 
@@ -38,7 +38,7 @@ public class PageParser {
         for (String nextLink : listLinks) {
             if (!results.isPageProcessed(nextLink)) {
                 try {
-                    new PageParser(nextLink).run(results, terms, currentDepth + 1);
+                    new Page(nextLink).run(results, terms, currentDepth + 1);
                 } catch (Exception e) {
 
                 }

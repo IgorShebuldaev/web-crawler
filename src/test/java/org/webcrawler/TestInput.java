@@ -7,33 +7,33 @@ import org.junit.jupiter.api.Test;
 import org.webcrawler.exceptions.input.InvalidLink;
 import org.webcrawler.exceptions.input.NotEnoughArguments;
 import org.webcrawler.exceptions.input.NotEnoughTerms;
-import org.webcrawler.parser.CommandLineParser;
+import org.webcrawler.parsers.CommandLineArguments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TestInput {
     private String[] args;
-    private CommandLineParser commandLineParser;
+    private CommandLineArguments commandLineArguments;
 
     @BeforeEach
     public void initialize() throws NotEnoughArguments, InvalidLink, NotEnoughTerms {
         args = new String[]{"-l", "https://google.com", "-t", "google"};
-        commandLineParser = new CommandLineParser(args);
+        commandLineArguments = new CommandLineArguments(args);
     }
 
     @Test
     public void testGetLink() {
-        assertEquals("https://google.com", commandLineParser.getLink());
+        assertEquals("https://google.com", commandLineArguments.getLink());
     }
 
     @Test
     public void testGetTerms() {
-        assertArrayEquals(new String[]{"google"}, commandLineParser.getTerms());
+        assertArrayEquals(new String[]{"google"}, commandLineArguments.getTerms());
     }
 
     @Test
     public void testGetParameters() {
-        assertEquals(new ArrayList<>(Arrays.asList(0, 0)), commandLineParser.getParameters());
+        assertEquals(new ArrayList<>(Arrays.asList(0, 0)), commandLineArguments.getParameters());
     }
 }

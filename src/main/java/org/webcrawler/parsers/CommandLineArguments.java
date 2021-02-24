@@ -1,8 +1,8 @@
-package org.webcrawler.parser;
+package org.webcrawler.parsers;
 
 import java.util.*;
 
-public class CommandLineParser {
+public class CommandLineArguments {
     public interface ISearching {
         void searchArgument(int index);
     }
@@ -13,7 +13,7 @@ public class CommandLineParser {
     private int depth = 0, pageLimit = 0;
     private String[] terms = new String[0];
 
-    public CommandLineParser(String[] args) {
+    public CommandLineArguments(String[] args) {
         this.args = args;
 
         searchArgument(flagLink, (i) -> link = args[i + 1]);
