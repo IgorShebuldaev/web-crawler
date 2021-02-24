@@ -5,32 +5,21 @@ import java.util.stream.Collectors;
 
 public class Results {
     private HashMap<String, Stats> results;
-    private int depth = 8;
-    private int pageLimit = 10000;
 
-    public Results(List<Integer> parameters) {
+    public int size() {
+        return results.size();
+    }
+
+    public Results() {
         this.results = new HashMap<>();
-        setNewParameters(parameters);
-    }
-
-    public int getDepth() {
-        return depth;
-    }
-
-    public int getPageLimit() {
-        return pageLimit;
-    }
-
-    public void addResult(String url, ArrayList<Integer> stats) {
-        results.put(url, new Stats(url, stats));
     }
 
     public boolean isPageProcessed(String link) {
         return results.get(link) != null;
     }
 
-    public boolean isLimitExceeded() {
-        return results.size() > pageLimit;
+    public void addResult(String url, ArrayList<Integer> stats) {
+        results.put(url, new Stats(url, stats));
     }
 
     public ArrayList<Stats> getSortedStats() {
@@ -46,8 +35,5 @@ public class Results {
         return new ArrayList<>(results.values());
     }
 
-    private void setNewParameters(List<Integer> parameters) {
-        if (parameters.get(0) != 0) depth = parameters.get(0);
-        if (parameters.get(1) != 0) pageLimit = parameters.get(1);
-    }
+
 }

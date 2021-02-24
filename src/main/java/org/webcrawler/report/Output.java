@@ -1,19 +1,37 @@
-package org.webcrawler.output;
+package org.webcrawler.report;
 
+import org.webcrawler.data.Results;
 import org.webcrawler.data.Stats;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Output {
-    CSV csv;
+    private CSV csv;
+    private List<String> headers;
+    private Results results;
 
-    public Output(String filename) throws IOException {
-        csv = new CSV(filename);
+    public Output(String filename, String[] headers, Results results) throws IOException {
+        this.csv = new CSV(filename);
+        this.headers = Arrays.asList(headers);
+        this.results = results;
     }
 
-    public void writeHeader(String[] headers) throws IOException {
+    public void makeReport() {
+        try {
+            headers.add(0, "Url");
+            writeHeader(headers);
+            writeResults(results.values());
+            finish();
+        } catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }
+
+    public void writeHeader(List<String> headers) throws IOException {
         for(var header : headers) {
             csv.write(header);
         }

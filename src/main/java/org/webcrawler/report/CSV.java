@@ -1,4 +1,4 @@
-package org.webcrawler.output;
+package org.webcrawler.report;
 
 import java.io.FileWriter;
 import java.io.IOException;

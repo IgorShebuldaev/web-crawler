@@ -5,54 +5,34 @@ import org.webcrawler.exceptions.input.InvalidLink;
 import org.webcrawler.exceptions.input.NotEnoughArguments;
 import org.webcrawler.exceptions.input.NotEnoughTerms;
 import org.webcrawler.exceptions.parser.PageLimitExceeded;
-import org.webcrawler.input.Input;
-import org.webcrawler.output.Output;
+import org.webcrawler.parser.CommandLineParser;
+import org.webcrawler.parser.PageParser;
+import org.webcrawler.report.Output;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Main {
-    public static void main(String[] args) throws InvalidLink, NotEnoughTerms, NotEnoughArguments {
+    public static void main(String[] args) throws InvalidLink, NotEnoughTerms, NotEnoughArguments, IOException {
 
-        Input input = new Input(args);
+        CommandLineParser commandLineParser = new CommandLineParser(args);
 
         ArrayList<Pattern> patterns = new ArrayList<>();
-	    for (var term : input.getTerms()) {
+	    for (var term : commandLineParser.getTerms()) {
 	        patterns.add(Pattern.compile(term));
         }
 
-        Results results = new Results(input.getParameters());
+        Results results = new Results();
 
 	    try {
-            new Parser(input.getLink()).run(results, patterns, 1);
-        } catch(PageLimitExceeded a) {
+            new PageParser(commandLineParser.getLink(), commandLineParser.getParameters()).run(results, patterns, 1);
+        } catch(PageLimitExceeded pageLimitExceeded) {
 	        System.err.println("Page limit exceeded! Finishing.");
-        } catch (IOException c) {
+        } catch (IOException error) {
 	        System.exit(1);
         }
 
-        try {
-            Output outputAll = new Output("output.csv");
-            Output output10 = new Output("top_10.csv");
-
-            String[] headers = new String[1 + patterns.size()];
-            headers[0] = "Url";
-            for(int i = 0; i < patterns.size(); i++) {
-                headers[i + 1] = patterns.get(i).toString();
-            }
-
-            outputAll.writeHeader(headers);
-            output10.writeHeader(headers);
-
-            outputAll.writeResults(results.values());
-            output10.writeResults(results.getSortedStats(), 10);
-            output10.printTopResults(results.getSortedStats(), 10);
-
-            outputAll.finish();
-            output10.finish();
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
+        new Output("output.csv", commandLineParser.getTerms(), results).makeReport();
     }
 }

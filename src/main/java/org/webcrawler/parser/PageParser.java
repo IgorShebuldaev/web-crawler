@@ -1,4 +1,4 @@
-package org.webcrawler;
+package org.webcrawler.parser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,11 +13,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Parser {
+public class PageParser {
     private String link;
+    private int depth;
+    private int pageLimit;
 
-    public Parser(String link) {
-        this.link = link;
+    public PageParser(String nextLink) {
+        this.link = nextLink;
+    }
+
+    public PageParser(String predefinedLink, List<Integer> parameters) {
+        this.link = predefinedLink;
+        setParameters(parameters);
     }
 
     public void run(Results results, ArrayList<Pattern> terms, int currentDepth) throws PageLimitExceeded, IOException, IllegalArgumentException {
@@ -25,19 +32,19 @@ public class Parser {
 
         results.addResult(link, collectStatistics(document, terms));
 
-        if (currentDepth > results.getDepth()) return;
+        if (currentDepth > depth) return;
         List<String> listLinks = parseLinks(document);
 
         for (String nextLink : listLinks) {
             if (!results.isPageProcessed(nextLink)) {
                 try {
-                    new Parser(nextLink).run(results, terms, currentDepth + 1);
+                    new PageParser(nextLink).run(results, terms, currentDepth + 1);
                 } catch (Exception e) {
 
                 }
             }
 
-            if (results.isLimitExceeded()) {
+            if (results.size() > pageLimit) {
                 throw new PageLimitExceeded();
             }
         }
@@ -73,5 +80,10 @@ public class Parser {
             long matches = matcher.results().count();
             return (int) matches;
         }).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private void setParameters(List<Integer> parameters) {
+        if (parameters.get(0) != 0) depth = parameters.get(0);
+        if (parameters.get(1) != 0) pageLimit = parameters.get(1);
     }
 }

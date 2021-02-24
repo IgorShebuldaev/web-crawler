@@ -6,7 +6,6 @@ import org.webcrawler.data.Results;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +14,7 @@ public class TestResults {
 
     @BeforeEach
     public void initialize() {
-        results = new Results(new ArrayList<>(Arrays.asList(0, 0)));
+        results = new Results();
     }
 
     @Test
