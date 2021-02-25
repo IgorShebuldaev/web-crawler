@@ -1,4 +1,4 @@
-package org.webcrawler.exceptions.input;
+package org.webcrawler.utils.exceptions.comandlinearguments;
 
 public class InvalidLink extends Exception {
     public InvalidLink() {

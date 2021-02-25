@@ -4,9 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.webcrawler.exceptions.input.InvalidLink;
-import org.webcrawler.exceptions.input.NotEnoughArguments;
-import org.webcrawler.exceptions.input.NotEnoughTerms;
+import org.webcrawler.utils.exceptions.comandlinearguments.InvalidLink;
+import org.webcrawler.utils.exceptions.comandlinearguments.NotEnoughArguments;
 import org.webcrawler.parsers.CommandLineArguments;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class TestInput {
     private CommandLineArguments commandLineArguments;
 
     @BeforeEach
-    public void initialize() throws NotEnoughArguments, InvalidLink, NotEnoughTerms {
+    public void initialize() throws NotEnoughArguments, InvalidLink {
         args = new String[]{"-l", "https://google.com", "-t", "google"};
         commandLineArguments = new CommandLineArguments(args);
     }

@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 
 public class Output {
     private CSV csv;
-    private List<String> headers;
+    private ArrayList<String> headers;
     private Results results;
 
     public Output(String filename, String[] headers, Results results) throws IOException {
         this.csv = new CSV(filename);
-        this.headers = Arrays.asList(headers);
+        this.headers = new ArrayList<>(Arrays.asList(headers));
         this.results = results;
     }
 
@@ -31,7 +31,7 @@ public class Output {
         }
     }
 
-    public void writeHeader(List<String> headers) throws IOException {
+    public void writeHeader(ArrayList<String> headers) throws IOException {
         for(var header : headers) {
             csv.write(header);
         }

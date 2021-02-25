@@ -30,7 +30,7 @@ public class TestOutput {
 
     @Test
     public void testWriteHeader() {
-        assertDoesNotThrow(() -> output.writeHeader(Arrays.asList(headers)));
+        assertDoesNotThrow(() -> output.writeHeader(new ArrayList<>(Arrays.asList(headers))));
     }
 
     @Test
