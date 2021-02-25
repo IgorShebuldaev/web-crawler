@@ -5,7 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.webcrawler.data.Results;
-import org.webcrawler.exceptions.parser.PageLimitExceeded;
+import org.webcrawler.utils.exceptions.page.PageLimitExceeded;
 
 import java.io.IOException;
 import java.util.*;
@@ -18,7 +18,7 @@ public class Page {
     private int depth = 8;
     private int pageLimit = 10000;
 
-    private Page(String nextLink) {
+    private Page(String nextLink, int depth, int pageLimit) {
         this.link = nextLink;
     }
 
@@ -38,7 +38,7 @@ public class Page {
         for (String nextLink : listLinks) {
             if (!results.isPageProcessed(nextLink)) {
                 try {
-                    new Page(nextLink).run(results, terms, currentDepth + 1);
+                    new Page(nextLink, this.depth, this.pageLimit).run(results, terms, currentDepth + 1);
                 } catch (Exception e) {
 
                 }
@@ -82,7 +82,7 @@ public class Page {
         }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private void setParameters(List<Integer> parameters) {
+    private void setNewParameters(List<Integer> parameters) {
         if (parameters.get(0) != 0) depth = parameters.get(0);
         if (parameters.get(1) != 0) pageLimit = parameters.get(1);
     }
