@@ -6,7 +6,6 @@ import org.webcrawler.data.Stats;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class Output {
@@ -42,20 +41,11 @@ public class Output {
         writeResults(results.stream().limit(limit).collect(Collectors.toCollection(ArrayList::new)));
     }
 
-    public void printTopResults(ArrayList<Stats> results, int limit) {
-        ArrayList<Stats> stats = results.stream().limit(limit).collect(Collectors.toCollection(ArrayList::new));
-        for (var links : stats) {
-            System.out.print(links.url + " ");
-            links.statistics.forEach((n) -> System.out.print(n + " "));
-            System.out.println();
-        }
-    }
-
     public void writeResults(ArrayList<Stats> results) throws IOException {
         for (var result : results) {
-            csv.write(result.url);
+            csv.write(result.getUrl());
 
-            for(var stats : result.statistics) {
+            for(var stats : result.getStatistics()) {
                 csv.write(stats.toString());
             }
             csv.newLine();

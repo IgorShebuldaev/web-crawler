@@ -6,12 +6,16 @@ import java.util.stream.Collectors;
 public class Results {
     private HashMap<String, Stats> results;
 
+    public Results() {
+        this.results = new HashMap<>();
+    }
+
     public int size() {
         return results.size();
     }
 
-    public Results() {
-        this.results = new HashMap<>();
+    public ArrayList<Stats> values() {
+        return new ArrayList<>(results.values());
     }
 
     public boolean isPageProcessed(String link) {
@@ -30,10 +34,4 @@ public class Results {
             return t2.compareTo(t1);
         }).collect(Collectors.toCollection(ArrayList::new));
     }
-
-    public ArrayList<Stats> values() {
-        return new ArrayList<>(results.values());
-    }
-
-
 }

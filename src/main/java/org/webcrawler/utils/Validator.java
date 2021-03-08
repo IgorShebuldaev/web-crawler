@@ -1,31 +1,48 @@
 package org.webcrawler.utils;
 
-import org.jsoup.Jsoup;
-import org.webcrawler.utils.exceptions.comandlinearguments.InvalidLink;
-import org.webcrawler.utils.exceptions.comandlinearguments.NotEnoughArguments;
-
-import java.io.IOException;
+import org.webcrawler.lib.IService;
 
 public class Validator {
+    private Config config;
+    private Errors errors;
+    private boolean checked = false;
+    private IService service;
 
-    public void validateArguments(String link, String[] terms) throws InvalidLink, NotEnoughArguments {
-        validateLink(link);
-        validateTerms(terms);
+    public Validator(Config config, IService service) {
+        this.config = config;
+        this.service = service;
     }
 
-    public void validateLink(String link) throws InvalidLink {
-        if (link != null) {
-            try {
-                Jsoup.connect(link).userAgent("Mozilla/5.0").execute();
-            } catch (IllegalArgumentException | IOException exception) {
-                throw new InvalidLink();
-            }
-        }
+    public boolean isValid() {
+        if (!checked) validateArguments();
+
+        return isEmpty();
     }
 
-    public void validateTerms(String[] terms) throws NotEnoughArguments {
-        if (terms == null) {
-            throw new NotEnoughArguments();
+    public String getErrors() {
+        return errors.fullMessages();
+    }
+
+    private boolean isEmpty() {
+        return errors.isEmpty();
+    }
+
+    private void validateArguments() {
+        errors = new Errors();
+        validateLink();
+        validateTerms();
+        checked = true;
+    }
+
+    private void validateLink() {
+       if (!service.successful()) {
+            errors.addError("Invalid link");
+       }
+    }
+
+    private void validateTerms()  {
+        if (config.getTerms() == null) {
+            errors.addError("Not enough arguments");
         }
     }
 }

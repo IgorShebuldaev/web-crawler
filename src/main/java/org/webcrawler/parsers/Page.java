@@ -1,72 +1,51 @@
-package org.webcrawler.parser;
+package org.webcrawler.parsers;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.webcrawler.data.Results;
-import org.webcrawler.utils.exceptions.page.PageLimitExceeded;
+import org.webcrawler.lib.IService;
+import org.webcrawler.utils.Config;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Page {
-    private String link;
-    private int depth = 8;
-    private int pageLimit = 10000;
+    private IService service;
 
-    private Page(String nextLink, int depth, int pageLimit) {
-        this.link = nextLink;
+    public Page(IService service) {
+        this.service = service;
     }
 
-    public PageParser(String predefinedLink, List<Integer> parameters) {
-        this.link = predefinedLink;
-        setParameters(parameters);
-    }
+    public void run(Results results, ArrayList<Pattern> terms, Config config, int currentDepth) {
+        if(!service.successful()) return;
 
-    public void run(Results results, ArrayList<Pattern> terms, int currentDepth) throws PageLimitExceeded, IOException, IllegalArgumentException {
-        Document document = getDocument(link);
+        results.addResult(service.getLink(), collectStatistics(terms));
 
-        results.addResult(link, collectStatistics(document, terms));
-
-        if (currentDepth > depth) return;
-        List<String> listLinks = parseLinks(document);
+        if (currentDepth > config.getDepth()) return;
+        List<String> listLinks = parseLinks();
 
         for (String nextLink : listLinks) {
             if (!results.isPageProcessed(nextLink)) {
-                try {
-                    new Page(nextLink, this.depth, this.pageLimit).run(results, terms, currentDepth + 1);
-                } catch (Exception e) {
-
-                }
+                service.setLink(nextLink);
+                new Page(service).run(results, terms, config, currentDepth + 1);
             }
 
-            if (results.size() > pageLimit) {
-                throw new PageLimitExceeded();
+            if (results.size() >= config.getPageLimit()) {
+                break;
             }
         }
     }
 
-    public Document getDocument(String link) throws IOException, IllegalArgumentException {
-        return Jsoup.connect(link).userAgent("Mozilla/5.0").get();
-    }
-
-    public List<String> parseLinks(Document page) {
+    public List<String> parseLinks() {
         List<String> linksList = new ArrayList<>();
 
-        Elements links = page.select("a[href]");
+        for (String link : service.getLinks()) {
 
-        for (Element link : links) {
-            String line = link.attr("abs:href");
-
-            if (!(line.contains("?") || line.contains("&"))) {
-                if (line.contains("#")) {
-                    linksList.add(line.substring(0, line.indexOf("#")));
+            if (!(link.contains("?") || link.contains("&"))) {
+                if (link.contains("#")) {
+                    linksList.add(link.substring(0, link.indexOf("#")));
                 } else {
-                    linksList.add(line);
+                    linksList.add(link);
                 }
             }
         }
@@ -74,16 +53,11 @@ public class Page {
         return linksList.stream().distinct().collect(Collectors.toList());
     }
 
-    public ArrayList<Integer> collectStatistics(Document document, ArrayList<Pattern> terms) {
+    public ArrayList<Integer> collectStatistics(ArrayList<Pattern> terms) {
         return terms.stream().map((term) -> {
-            Matcher matcher = term.matcher(document.body().text());
+            Matcher matcher = term.matcher(service.getBody());
             long matches = matcher.results().count();
             return (int) matches;
         }).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private void setNewParameters(List<Integer> parameters) {
-        if (parameters.get(0) != 0) depth = parameters.get(0);
-        if (parameters.get(1) != 0) pageLimit = parameters.get(1);
     }
 }
