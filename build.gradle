@@ -2,14 +2,12 @@ apply plugin: "application"
 
 mainClassName = "org.webcrawler.Main"
 
-jar {
-    manifest {
-        attributes('Main-Class': 'org.webcrawler.Main')
-    }
-}
-
 group 'org.webcrawler'
 version '1.0'
+
+configurations {
+    extraLibs
+}
 
 repositories {
     mavenCentral()
@@ -18,9 +16,20 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+    extraLibs group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+    configurations.compile.extendsFrom(configurations.extraLibs)
 }
 
 test {
     useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': 'org.webcrawler.Main')
+    }
+
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
