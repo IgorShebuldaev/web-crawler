@@ -3,7 +3,6 @@ apply plugin: "application"
 mainClassName = "org.webcrawler.Main"
 
 group 'org.webcrawler'
-version '1.0'
 
 configurations {
     extraLibs

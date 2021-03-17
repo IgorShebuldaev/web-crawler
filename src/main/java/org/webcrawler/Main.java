@@ -37,5 +37,7 @@ public class Main {
 	    new Page(service).run(results, patterns, config,1);
 
         new Output(config.getFileName(), config.getTerms(), results).makeReport();
+
+        System.out.println("Done!");
     }
 }
