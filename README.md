@@ -4,7 +4,7 @@ A simple search engine that analyzes pages by keywords. Collects statistics for 
 Docker
 ## Getting Started
     docker pull wannaasbird/webcrawler:java 
-    docker run -v $(pwd)/result:/output wannaasbird/webcrawler:java args
+    docker run -v $(pwd)/result:/output wannaasbird/webcrawler args
 After that, the results folder will be created in the root of the project, where the result of the parser will be located.
 ## Specification for command-line arguments
     -l link
