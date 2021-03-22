@@ -1,11 +1,10 @@
 package org.webcrawler.parsers;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.webcrawler.data.Results;
-import org.webcrawler.lib.IService;
+import org.webcrawler.lib.IHTMLFetcher;
 import org.webcrawler.utils.Config;
 
 
@@ -24,27 +23,28 @@ public class TestPage {
     void initialize() {
         config = new Config();
         config.setLink("somelink");
-        config.setTerms(new String[]{"html"});
+        config.setTerms(new String[]{"GET", "POST"});
     }
 
-//infinite loop
-//    @Test
-//    public void testRun() {
-//        ArrayList<Pattern> patterns = new ArrayList<>();
-//        for (var term : config.getTerms()) {
-//            patterns.add(Pattern.compile(term));
-//        }
-//
-//        Results results = new Results();
-//
-//        new Page(new TestService()).run(results, patterns, config, 1);
-//
-//        Assertions.assertEquals(1, results.size());
-//    }
+    @Test
+    public void testRun() {
+        ArrayList<Pattern> patterns = new ArrayList<>();
+        for (var term : config.getTerms()) {
+            patterns.add(Pattern.compile(term));
+        }
+
+        Results results = new Results();
+        TestHTMLFetcher testHTMLFetcher = new TestHTMLFetcher();
+        testHTMLFetcher.setLink(config.getLink());
+
+        new Page(testHTMLFetcher).run(results, patterns, config, 1);
+
+        Assertions.assertEquals(11, results.size());
+    }
 
     @Test
     public void testParseLinks() {
-        Assertions.assertEquals(new TestService().getLinks(), new Page(new TestService()).parseLinks());
+        Assertions.assertEquals(new TestHTMLFetcher().getLinks(), new Page(new TestHTMLFetcher()).parseLinks());
     }
 
     @Test
@@ -52,48 +52,56 @@ public class TestPage {
         ArrayList<Pattern> terms = new ArrayList<>();
         terms.add(Pattern.compile("GET"));
         terms.add(Pattern.compile("POST"));
-        Assertions.assertEquals(new ArrayList<>(Arrays.asList(1, 1)), new Page(new TestService()).collectStatistics(terms));
+        Assertions.assertEquals(new ArrayList<>(Arrays.asList(1, 1)), new Page(new TestHTMLFetcher()).collectStatistics(terms));
     }
 
-    class TestService implements IService {
+    class TestHTMLFetcher implements IHTMLFetcher {
+        private List<String> listLinks;
+        private String body;
+        private String link;
 
         @Override
         public void setLink(String link) {
-
+            this.link = link;
         }
 
         @Override
         public String getLink() {
-            return null;
+            return link;
         }
 
         @Override
         public String getBody() {
+            if (body != null) return body;
             InputStream file = getClass().getClassLoader().getResourceAsStream("test.html");
 
-            return new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8))
+            body = new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8))
                     .lines()
                     .collect(Collectors.joining("\n"));
+
+            return body;
         }
 
         @Override
         public List<String> getLinks() {
+            if (listLinks != null) return listLinks;
+
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("links.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
 
             String line;
-            List<String> expectedList = new ArrayList<>();
+            listLinks = new ArrayList<>();
 
             try {
                 while ((line = reader.readLine()) != null) {
-                    expectedList.add(line);
+                    listLinks.add(line);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            return expectedList;
+            return listLinks;
         }
 
         @Override

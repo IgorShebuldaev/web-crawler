@@ -2,9 +2,9 @@ package org.webcrawler;
 
 import org.webcrawler.data.Results;
 import org.webcrawler.parsers.CommandLine;
-import org.webcrawler.lib.Service;
+import org.webcrawler.lib.HTMLFetcher;
 import org.webcrawler.utils.Config;
-import org.webcrawler.utils.Validator;
+import org.webcrawler.utils.ConfigValidator;
 import org.webcrawler.parsers.Page;
 import org.webcrawler.report.Output;
 
@@ -17,13 +17,13 @@ public class Main {
 
         Config config = new CommandLine(args).getConfig();
 
-        Service service = new Service();
-        service.setLink(config.getLink());
+        HTMLFetcher HTMLFetcher = new HTMLFetcher();
+        HTMLFetcher.setLink(config.getLink());
 
-        Validator validator = new Validator(config, service);
+        ConfigValidator configValidator = new ConfigValidator(config, HTMLFetcher);
 
-        if (!validator.isValid()) {
-            System.out.println(validator.getErrors());
+        if (!configValidator.isValid()) {
+            System.out.println(configValidator.getErrors());
             System.exit(1);
         }
 
@@ -34,7 +34,7 @@ public class Main {
 
         Results results = new Results();
 
-	    new Page(service).run(results, patterns, config,1);
+	    new Page(HTMLFetcher).run(results, patterns, config,1);
 
         new Output(config.getFileName(), config.getTerms(), results).makeReport();
 

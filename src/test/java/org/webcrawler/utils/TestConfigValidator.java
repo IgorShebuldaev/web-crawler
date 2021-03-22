@@ -1,14 +1,13 @@
 package org.webcrawler.utils;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.webcrawler.lib.IService;
+import org.webcrawler.lib.IHTMLFetcher;
 
 import java.util.List;
 
-public class TestValidator {
+public class TestConfigValidator {
     Config validConfig;
 
     @BeforeEach
@@ -20,33 +19,33 @@ public class TestValidator {
 
     @Test
     public void testIsValid() {
-        TestService testService = new TestService();
-        testService.setLink(validConfig.getLink());
-        Assertions.assertTrue(new Validator(validConfig, testService).isValid());
+        TestHTMLFetcher testHTMLFetcher = new TestHTMLFetcher();
+        testHTMLFetcher.setLink(validConfig.getLink());
+        Assertions.assertTrue(new ConfigValidator(validConfig, testHTMLFetcher).isValid());
     }
 
     @Test
     public void testIsInvalid() {
-        Assertions.assertFalse(new Validator(new Config(), new TestService()).isValid());
+        Assertions.assertFalse(new ConfigValidator(new Config(), new TestHTMLFetcher()).isValid());
     }
 
     @Test
     public void testGetErrors() {
-        Validator validator = new Validator(new Config(), new TestService());
-        validator.isValid();
-        Assertions.assertEquals("Invalid link, Not enough arguments", validator.getErrors());
+        ConfigValidator configValidator = new ConfigValidator(new Config(), new TestHTMLFetcher());
+        configValidator.isValid();
+        Assertions.assertEquals("Invalid link, Not enough arguments", configValidator.getErrors());
     }
 
     @Test
     public void testGetErrorsIfValidConfig() {
-        TestService testService = new TestService();
-        testService.setLink("somelink");
-        Validator validator = new Validator(validConfig, testService);
-        validator.isValid();
-        Assertions.assertEquals("", validator.getErrors());
+        TestHTMLFetcher testHTMLFetcher = new TestHTMLFetcher();
+        testHTMLFetcher.setLink("somelink");
+        ConfigValidator configValidator = new ConfigValidator(validConfig, testHTMLFetcher);
+        configValidator.isValid();
+        Assertions.assertEquals("", configValidator.getErrors());
     }
 
-    public class TestService implements IService {
+    public class TestHTMLFetcher implements IHTMLFetcher {
         String link;
 
         @Override

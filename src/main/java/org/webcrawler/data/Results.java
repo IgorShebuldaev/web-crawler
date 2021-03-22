@@ -7,7 +7,11 @@ public class Results {
     private HashMap<String, Stats> results;
 
     public Results() {
-        this.results = new HashMap<>();
+        results = new HashMap<>();
+    }
+
+    public boolean isPageProcessed(String link) {
+        return results.get(link) != null;
     }
 
     public int size() {
@@ -18,14 +22,6 @@ public class Results {
         return new ArrayList<>(results.values());
     }
 
-    public boolean isPageProcessed(String link) {
-        return results.get(link) != null;
-    }
-
-    public void addResult(String url, ArrayList<Integer> stats) {
-        results.put(url, new Stats(url, stats));
-    }
-
     public ArrayList<Stats> getSortedStats() {
         return results.values().stream().sorted((s1, s2) -> {
             Integer t1 = s1.total();
@@ -33,5 +29,9 @@ public class Results {
 
             return t2.compareTo(t1);
         }).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public void addResult(String url, ArrayList<Integer> stats) {
+        results.put(url, new Stats(url, stats));
     }
 }

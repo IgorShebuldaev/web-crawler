@@ -2,10 +2,10 @@ package org.webcrawler.lib;
 
 import java.util.List;
 
-public interface IService {
-    void setLink(String link);
+public interface IHTMLFetcher {
+    boolean successful();
     String getLink();
     String getBody();
     List<String> getLinks();
-    boolean successful();
+    void setLink(String link);
 }

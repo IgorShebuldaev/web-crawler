@@ -1,30 +1,26 @@
 package org.webcrawler.utils;
 
-import org.webcrawler.lib.IService;
+import org.webcrawler.lib.IHTMLFetcher;
 
-public class Validator {
+public class ConfigValidator {
+    private boolean checked = false;
     private Config config;
     private Errors errors;
-    private boolean checked = false;
-    private IService service;
+    private IHTMLFetcher HTMLFetcher;
 
-    public Validator(Config config, IService service) {
+    public ConfigValidator(Config config, IHTMLFetcher HTMLFetcher) {
         this.config = config;
-        this.service = service;
+        this.HTMLFetcher = HTMLFetcher;
     }
 
     public boolean isValid() {
         if (!checked) validateArguments();
 
-        return isEmpty();
+        return errors.isEmpty();
     }
 
     public String getErrors() {
         return errors.fullMessages();
-    }
-
-    private boolean isEmpty() {
-        return errors.isEmpty();
     }
 
     private void validateArguments() {
@@ -35,7 +31,7 @@ public class Validator {
     }
 
     private void validateLink() {
-       if (!service.successful()) {
+       if (!HTMLFetcher.successful()) {
             errors.addError("Invalid link");
        }
     }

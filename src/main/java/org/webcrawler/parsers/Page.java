@@ -1,7 +1,7 @@
 package org.webcrawler.parsers;
 
 import org.webcrawler.data.Results;
-import org.webcrawler.lib.IService;
+import org.webcrawler.lib.IHTMLFetcher;
 import org.webcrawler.utils.Config;
 
 import java.util.*;
@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Page {
-    private IService service;
+    private IHTMLFetcher service;
 
-    public Page(IService service) {
+    public Page(IHTMLFetcher service) {
         this.service = service;
     }
 

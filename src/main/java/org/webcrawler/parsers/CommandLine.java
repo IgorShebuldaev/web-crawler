@@ -5,7 +5,6 @@ import org.webcrawler.utils.Config;
 import java.util.Arrays;
 
 public class CommandLine {
-
     private String[] args;
     private String flagFileName = "-f";
     private String flagLink = "-l";
@@ -18,14 +17,14 @@ public class CommandLine {
         this.args = args;
         config = new Config();
 
-        searchArgument();
+        parseArguments();
     }
 
     public Config getConfig() {
         return config;
     }
 
-    private void searchArgument() {
+    private void parseArguments() {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals(flagFileName)) {
               config.setFileName(args[i + 1]);

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Service implements IService {
+public class HTMLFetcher implements IHTMLFetcher {
     private String link;
     private Document page;
 
@@ -26,11 +26,15 @@ public class Service implements IService {
 
     @Override
     public String getBody() {
+        if (page == null) return "";
+
         return page.body().text();
     }
 
     @Override
     public List<String> getLinks() {
+        if (page == null) return new ArrayList<>();
+
         List<String> linksList = new ArrayList<>();
 
         Elements links = page.select("a[href]");

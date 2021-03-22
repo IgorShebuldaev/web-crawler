@@ -45,6 +45,4 @@ public class Config {
     public void setTerms(String[] terms) {
         this.terms = terms;
     }
-
-
 }
